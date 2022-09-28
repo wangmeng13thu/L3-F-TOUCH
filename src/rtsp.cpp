@@ -64,7 +64,7 @@ void rtspTask(void *pvParameters)
 	static uint32_t lastimage = millis();
 
 	// rtspServer.setNoDelay(true);
-	rtspServer.setTimeout(1);
+	rtspServer.setTimeout(1); // 1
 	rtspServer.begin();
 
 	while (1)

@@ -4,7 +4,7 @@
 #define OTA
 
 //config sensor role
-#define ROLE DOUBLE_PALM_TOP
+#define ROLE FINGER
 
 #define FINGER 0
 #define THUMB_PALM 1
@@ -12,7 +12,7 @@
 #define DOUBLE_PALM_BOT 3
 #define DOUBLE_PALM_TOP 4
 
-const int shutterTime[]={8,100,400,100,150};//finger,thumb_palm,tri_palm,double_palm
+const int shutterTime[]={1,110,50,20,20};//finger default is 8,thumb_palm,tri_palm 350,double_palm
 /** Camera class */
 OV2640 cam;
 boolean ota=false;
@@ -43,7 +43,7 @@ camera_config_t userCamNew {
     .pin_vsync = 4,
     .pin_href = 2,//HSYNC
     .pin_pclk = 14,
-    .xclk_freq_hz = 24000000,
+    .xclk_freq_hz = 24000000, //24000000
     .ledc_timer = LEDC_TIMER_1,
     .ledc_channel = LEDC_CHANNEL_1,
     .pixel_format = PIXFORMAT_JPEG,
@@ -53,11 +53,15 @@ camera_config_t userCamNew {
 	 //.frame_size = FRAMESIZE_240X240,
 #if ROLE
 	.frame_size = FRAMESIZE_HQVGA,
+	// .frame_size = FRAMESIZE_HVGA,
 #else
     .frame_size = FRAMESIZE_QCIF,
+	// .frame_size = FRAMESIZE_QVGA,
+	// .frame_size = FRAMESIZE_HVGA,
+	// .frame_size = FRAMESIZE_HVGA,
 #endif
 	//.frame_size = FRAMESIZE_QQVGA,
-    .jpeg_quality = 10,               //0-63 lower numbers are higher quality
+    .jpeg_quality = 3,             //0-63 lower numbers are higher quality	10
     .fb_count = 2 // if more than one i2s runs in continous mode.  Use only with jpeg
 };
 
@@ -84,17 +88,26 @@ void setup()
   	s->set_wb_mode(s, 1);//enable manul WB as sunny
     s->set_exposure_ctrl(s,0);//enable manul shutter 
     s->set_saturation(s, 1);  
+	// s->set_sharpness(s, 2);
 	s->set_aec_value(s,shutterTime[ROLE]);//shutter time
 
     //try adjust WB (seems RGB)
-    s->set_reg(s,0XCC,0xFF,0x50);//R
-    s->set_reg(s,0XCD,0xFF,0x41);//G
-    s->set_reg(s,0XCE,0xFF,0x54);//B
+    s->set_reg(s,0XCC,0xFF,0x52);//R default:0x50 3.50:0x48 3.53:0x48 3.61:0x52 3.60:0x55 3.59:0x48 3.56:0x54 3.68:0x50 3.55:0x53 3.58:0x54 3.63:0x50 3.52:0x54 3.54:0x52 3.62  3.66:0x50 3.51:0x48 3.53:0x52 3.57:0x52 3.61 0x48 3.65:0x48
+    s->set_reg(s,0XCD,0xFF,0x45);//G default:0x41 3.50:0x45 3.53:0x41 3.61:0x45 3.60:0x45 3.59:0x45 3.56:0x45 3.68:0x41 3.55:0x42 3.58:0x44 3.63:0x48 3.52:0x45 3.54:0x41 3.62  3.66:0x45 3.51:0x41 3.53:0x41 3.57:0x45 3.61 0x45 3.65:0x41
+    s->set_reg(s,0XCE,0xFF,0x50);//B default:0x54 3.50:0x52 3.53:0x50 3.61:0x50 3.60:0x54 3.59:0x52 3.56:0x54 3.68:0x42 3.55:0x54 3.58:0x54 3.63:0x52 3.52:0x54 3.54:0x52 3.62  3.66:0x52 3.51:0x50 3.53:0x52 3.57:0x48 3.61 0x52 3.65:0x50
+
+	//top finger default RGB : 0x52 0x45 0x50
+	//middle finger default RGB : 0x50 0x42 0x52
+	//bottom finger default RGB : 0x46 0x42 0x48
+	//TRI_PALM default: 0x46 0x42 0x48
 
 	// Connect the WiFi
     Serial.println("Wifi init start");
 	WiFi.mode(WIFI_STA);
 	WiFi.begin(ssid, password);
+	WiFi.setTxPower(WIFI_POWER_8_5dBm);
+	
+
 	while (WiFi.status() != WL_CONNECTED)
 	{
 		delay(500);
@@ -169,13 +182,14 @@ void loop()
 		else if (error == OTA_END_ERROR) Serial.println("End Failed");
 		});
 		ArduinoOTA.begin();
+		ArduinoOTA.setTimeout(5000);
 
 	}
 	if(ota)
 		ArduinoOTA.handle();
 #endif
 
-	delay(100);
+	delay(10);
 }
 
 
