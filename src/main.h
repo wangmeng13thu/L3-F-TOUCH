@@ -19,8 +19,9 @@
 
 // Select which of the servers are active
 // Select only one or the streaming will be very slow!
-// #define ENABLE_WEBSERVER
-#define ENABLE_RTSPSERVER
+#define ENABLE_WEBSERVER
+//#define ENABLE_RTSPSERVER
+//#define ENABLE_UDPRAW
 
 // Camera class
 extern OV2640 cam;
@@ -34,8 +35,6 @@ void initWebStream(void);
 void stopWebStream(void);
 void handleWebServer(void);
 
-// OTA stuff
-void startOTA(void);
-void stopOTA(void);
-extern boolean otaStarted;
 
+//udpraw
+void initUDPraw(void);

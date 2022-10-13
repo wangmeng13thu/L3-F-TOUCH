@@ -1,5 +1,5 @@
 #include "main.h"
-
+#ifdef ENABLE_WEBSERVER
 /** Web server class */
 WebServer server(80);
 
@@ -22,9 +22,9 @@ void handleNotFound();
  */
 void initWebStream(void)
 {
-#ifdef ENABLE_WEBSERVER
+
 	// Create the task for the web server
-	xTaskCreate(webTask, "WEB", 4096, NULL, 1, &webTaskHandler);
+	xTaskCreate(webTask, "WEB", 8000, NULL, 1, &webTaskHandler);
 
 	if (webTaskHandler == NULL)
 	{
@@ -34,7 +34,7 @@ void initWebStream(void)
 	{
 		Serial.println("Webstream task up and running");
 	}
-#endif
+
 }
 
 /**
@@ -66,10 +66,10 @@ void webTask(void *pvParameters)
 
 	while (1)
 	{
-#ifdef ENABLE_WEBSERVER
+
 			// Check if the server has clients
 			server.handleClient();
-#endif
+
 		}
 		if (stopWeb)
 		{
@@ -78,10 +78,10 @@ void webTask(void *pvParameters)
 			// Delete this task
 			vTaskDelete(NULL);
 		}
-		delay(100);
+		vTaskDelay(10);
 }
 
-#ifdef ENABLE_WEBSERVER
+
 /**
  * Handle web stream requests
  * Gives a first response to prepare the streaming

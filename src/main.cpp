@@ -17,9 +17,6 @@ const int shutterTime[]={1,110,50,20,20};//finger default is 8,thumb_palm,tri_pa
 OV2640 cam;
 boolean ota=false;
 
-/** Function declarations */
-void resetDevice(void);
-
 camera_config_t userCamNew {
 
     .pin_pwdn = 19, //NC
@@ -65,6 +62,43 @@ camera_config_t userCamNew {
     .fb_count = 2 // if more than one i2s runs in continous mode.  Use only with jpeg
 };
 
+camera_config_t test {
+
+    .pin_pwdn = 32,
+    .pin_reset = -1,
+
+    .pin_xclk = 0,
+
+    .pin_sscb_sda = 26,
+    .pin_sscb_scl = 27,
+
+    // Note: LED GPIO is apparently 4 not sure where that goes
+    // per https://github.com/donny681/ESP32_CAMERA_QR/blob/e4ef44549876457cd841f33a0892c82a71f35358/main/led.c
+    .pin_d7 = 35,
+    .pin_d6 = 34,
+    .pin_d5 = 39,
+    .pin_d4 = 36,
+    .pin_d3 = 21,
+    .pin_d2 = 19,
+    .pin_d1 = 18,
+    .pin_d0 = 5,
+    .pin_vsync = 25,
+    .pin_href = 23,
+    .pin_pclk = 22,
+    .xclk_freq_hz = 24000000,
+    .ledc_timer = LEDC_TIMER_1,
+    .ledc_channel = LEDC_CHANNEL_1,
+    .pixel_format = PIXFORMAT_JPEG,
+     .frame_size = FRAMESIZE_UXGA, // needs 234K of framebuffer space
+    // .frame_size = FRAMESIZE_SXGA, // needs 160K for framebuffer
+     //.frame_size = FRAMESIZE_XGA, // needs 96K or even smaller FRAMESIZE_SVGA - can work if using only 1 fb
+    //.frame_size = FRAMESIZE_96X96,
+	//.frame_size = FRAMESIZE_QCIF,
+    .jpeg_quality = 5,               //0-63 lower numbers are higher quality
+    .fb_count = 1 // if more than one i2s runs in continous mode.  Use only with jpeg
+};
+
+
 void setup()
 {
 	// Start the serial connection
@@ -81,15 +115,15 @@ void setup()
 	delay(100);
 	
 	
-	cam.init(userCamNew);
+	cam.init(test);
 	delay(100);
 
 	sensor_t * s = esp_camera_sensor_get();
-  	s->set_wb_mode(s, 1);//enable manul WB as sunny
-    s->set_exposure_ctrl(s,0);//enable manul shutter 
-    s->set_saturation(s, 1);  
-	// s->set_sharpness(s, 2);
-	s->set_aec_value(s,shutterTime[ROLE]);//shutter time
+  	// s->set_wb_mode(s, 1);//enable manul WB as sunny
+    // s->set_exposure_ctrl(s,0);//enable manul shutter 
+    // s->set_saturation(s, 1);  
+	// // s->set_sharpness(s, 2);
+	// s->set_aec_value(s,shutterTime[ROLE]);//shutter time
 
     //try adjust WB (seems RGB)
     s->set_reg(s,0XCC,0xFF,0x52);//R default:0x50 3.50:0x48 3.53:0x48 3.61:0x52 3.60:0x55 3.59:0x48 3.56:0x54 3.68:0x50 3.55:0x53 3.58:0x54 3.63:0x50 3.52:0x54 3.54:0x52 3.62  3.66:0x50 3.51:0x48 3.53:0x52 3.57:0x52 3.61 0x48 3.65:0x48
@@ -105,7 +139,7 @@ void setup()
     Serial.println("Wifi init start");
 	WiFi.mode(WIFI_STA);
 	WiFi.begin(ssid, password);
-	WiFi.setTxPower(WIFI_POWER_8_5dBm);
+	//WiFi.setTxPower(WIFI_POWER_8_5dBm);
 	
 
 	while (WiFi.status() != WL_CONNECTED)
@@ -123,6 +157,8 @@ void setup()
 	Serial.print("Stream Link: rtsp://");
 	Serial.print(ip);
 	Serial.println(":8554/mjpeg/1\n");
+	// Initialize the RTSP stream server
+	initRTSP();
 #endif
 #ifdef ENABLE_WEBSERVER
 	Serial.print("Browser Stream Link: http://");
@@ -131,16 +167,14 @@ void setup()
 	Serial.print("Browser Single Picture Link: http//");
 	Serial.print(ip);
 	Serial.println("/jpg\n");
-#endif
-#ifdef ENABLE_WEBSERVER
 	// Initialize the HTTP web stream server
 	initWebStream();
 #endif
-
-#ifdef ENABLE_RTSPSERVER
-	// Initialize the RTSP stream server
-	initRTSP();
+#ifdef ENABLE_UDPRAW
+	Serial.print("Broadcast via UDP, to port 8888");
+	initUDPraw();
 #endif
+
 	//use RX PIN for OTA 
 	pinMode(3,INPUT_PULLUP);
 }
@@ -155,7 +189,13 @@ void loop()
 			delay(1);
 		}
 		ota=true;
+		#ifdef ENABLE_RTSPSERVER
 		stopRTSP();
+		#endif
+		#ifdef ENABLE_WEBSERVER
+		stopWebStream();
+		#endif
+
 		ArduinoOTA
 		.onStart([]() {
 		String type;
@@ -191,12 +231,3 @@ void loop()
 
 	delay(10);
 }
-
-
-void resetDevice(void)
-{
-	delay(100);
-	WiFi.disconnect();
-	esp_restart();
-}
-
