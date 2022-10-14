@@ -43,11 +43,13 @@ camera_config_t userCamNew {
     .xclk_freq_hz = 24000000, //24000000
     .ledc_timer = LEDC_TIMER_1,
     .ledc_channel = LEDC_CHANNEL_1,
+
+#ifdef ENABLE_UDPRAW
+	.pixel_format = PIXFORMAT_RGB565,
+	.frame_size = FRAMESIZE_QQVGA,
+#else
     .pixel_format = PIXFORMAT_JPEG,
-    // .frame_size = FRAMESIZE_UXGA, // needs 234K of framebuffer space
-    // .frame_size = FRAMESIZE_SXGA, // needs 160K for framebuffer
-     //.frame_size = FRAMESIZE_QVGA, 
-	 //.frame_size = FRAMESIZE_240X240,
+
 #if ROLE
 	.frame_size = FRAMESIZE_HQVGA,
 	// .frame_size = FRAMESIZE_HVGA,
@@ -58,8 +60,17 @@ camera_config_t userCamNew {
 	// .frame_size = FRAMESIZE_HVGA,
 #endif
 	//.frame_size = FRAMESIZE_QQVGA,
+#endif
+
+
+#ifdef ENABLE_WEBSERVER	
     .jpeg_quality = 3,             //0-63 lower numbers are higher quality	10
+    .fb_count = 1 // if more than one i2s runs in continous mode.  Use only with jpeg
+#else
+	.jpeg_quality = 10,             //0-63 lower numbers are higher quality	10
     .fb_count = 2 // if more than one i2s runs in continous mode.  Use only with jpeg
+#endif
+
 };
 
 camera_config_t test {
@@ -88,12 +99,12 @@ camera_config_t test {
     .xclk_freq_hz = 24000000,
     .ledc_timer = LEDC_TIMER_1,
     .ledc_channel = LEDC_CHANNEL_1,
-    .pixel_format = PIXFORMAT_JPEG,
-     .frame_size = FRAMESIZE_UXGA, // needs 234K of framebuffer space
+    .pixel_format = PIXFORMAT_RGB565,
+    // .frame_size = FRAMESIZE_UXGA, // needs 234K of framebuffer space
     // .frame_size = FRAMESIZE_SXGA, // needs 160K for framebuffer
-     //.frame_size = FRAMESIZE_XGA, // needs 96K or even smaller FRAMESIZE_SVGA - can work if using only 1 fb
-    //.frame_size = FRAMESIZE_96X96,
-	//.frame_size = FRAMESIZE_QCIF,
+    // .frame_size = FRAMESIZE_VGA, // needs 96K or even smaller FRAMESIZE_SVGA - can work if using only 1 fb
+    //.frame_size = FRAMESIZE_QCIF,
+	.frame_size = FRAMESIZE_QQVGA,
     .jpeg_quality = 5,               //0-63 lower numbers are higher quality
     .fb_count = 1 // if more than one i2s runs in continous mode.  Use only with jpeg
 };
@@ -115,7 +126,7 @@ void setup()
 	delay(100);
 	
 	
-	cam.init(test);
+	cam.init(userCamNew);
 	delay(100);
 
 	sensor_t * s = esp_camera_sensor_get();
@@ -147,12 +158,12 @@ void setup()
 		delay(500);
 		Serial.print(".");
 	}
-
-
 	// Print information how to contact the camera server
 	IPAddress ip = WiFi.localIP();
 	Serial.print("\nWiFi connected with IP ");
 	Serial.println(ip);
+
+
 #ifdef ENABLE_RTSPSERVER
 	Serial.print("Stream Link: rtsp://");
 	Serial.print(ip);
@@ -164,14 +175,14 @@ void setup()
 	Serial.print("Browser Stream Link: http://");
 	Serial.print(ip);
 	Serial.println("\n");
-	Serial.print("Browser Single Picture Link: http//");
+	Serial.print("Browser Single Picture Link: http://");
 	Serial.print(ip);
 	Serial.println("/jpg\n");
 	// Initialize the HTTP web stream server
 	initWebStream();
 #endif
 #ifdef ENABLE_UDPRAW
-	Serial.print("Broadcast via UDP, to port 8888");
+	Serial.println("Broadcast via UDP, to port 8888");
 	initUDPraw();
 #endif
 
