@@ -19,9 +19,9 @@
 
 // Select which of the servers are active
 // Select only one or the streaming will be very slow!
-#define ENABLE_WEBSERVER
+//#define ENABLE_WEBSERVER
 //#define ENABLE_RTSPSERVER
-//#define ENABLE_UDPRAW
+#define ENABLE_UDPRAW
 
 // Camera class
 extern OV2640 cam;
