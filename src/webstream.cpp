@@ -15,6 +15,9 @@ boolean stopWeb = false;
 /** Web request function forward declarations */
 void handle_jpg_stream(void);
 void handle_jpg(void);
+#ifdef USE_PNG
+void handle_png(void);
+#endif
 void handleNotFound();
 
 /**
@@ -24,7 +27,7 @@ void initWebStream(void)
 {
 
 	// Create the task for the web server
-	xTaskCreate(webTask, "WEB", 8000, NULL, 1, &webTaskHandler);
+	xTaskCreatePinnedToCore(webTask, "WEB", 8000, NULL, configMAX_PRIORITIES-1, &webTaskHandler,1);
 
 	if (webTaskHandler == NULL)
 	{
@@ -59,6 +62,9 @@ void webTask(void *pvParameters)
 	server.on("/", HTTP_GET, handle_jpg_stream);
 	// Set the function to handle single picture requests
 	server.on("/jpg", HTTP_GET, handle_jpg);
+#ifdef USE_PNG
+	server.on("/png", HTTP_GET, handle_png);
+#endif
 	// Set the function to handle other requests
 	server.onNotFound(handleNotFound);
 	// Start the web server
@@ -133,6 +139,22 @@ void handle_jpg(void)
 	thisClient.write((char *)cam.getfb(), cam.getSize());
 }
 
+#ifdef USE_PNG
+void handle_png(void)
+{
+	WiFiClient thisClient = server.client();
+
+	if (!thisClient.connected())
+	{
+		return;
+	}
+	String response = "HTTP/1.1 200 OK\r\n";
+	response += "Content-disposition: inline; filename=capture.png\r\n";
+	response += "Content-type: image/png\r\n\r\n";
+	server.sendContent(response);
+	Serial.println(thisClient.write(buf_png, size_png));
+}
+#endif
 /**
  * Handle any other request from the web client
  */

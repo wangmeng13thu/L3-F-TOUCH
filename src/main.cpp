@@ -44,29 +44,40 @@ camera_config_t userCamNew {
     .ledc_timer = LEDC_TIMER_1,
     .ledc_channel = LEDC_CHANNEL_1,
 
-#ifdef ENABLE_UDPRAW
-	.pixel_format = PIXFORMAT_RGB565,
-	.frame_size = FRAMESIZE_QQVGA,
-#else
-    .pixel_format = PIXFORMAT_JPEG,
 
+#ifdef USE_PNG
+	.pixel_format = PIXFORMAT_RGB565,	
 #if ROLE
-	.frame_size = FRAMESIZE_HQVGA,
-	// .frame_size = FRAMESIZE_HVGA,
+	.frame_size = FRAMESIZE_VGA,
+#else
+    .frame_size = FRAMESIZE_VGA,
+#endif
+
+#else
+	 .pixel_format = PIXFORMAT_JPEG,
+
+#ifdef ENABLE_RTSPSERVER
+#if ROLE
+	.frame_size = FRAMESIZE_HQVGA,	
 #else
     .frame_size = FRAMESIZE_QCIF,
-	// .frame_size = FRAMESIZE_QVGA,
-	// .frame_size = FRAMESIZE_HVGA,
-	// .frame_size = FRAMESIZE_HVGA,
 #endif
-	//.frame_size = FRAMESIZE_QQVGA,
+
+#else // ENABLE_WEBSERVER
+#if ROLE
+	.frame_size = FRAMESIZE_HQVGA,
+#else
+    .frame_size = FRAMESIZE_QCIF,
+#endif
+
+#endif
 #endif
 
 
 #ifdef ENABLE_WEBSERVER	
     .jpeg_quality = 3,             //0-63 lower numbers are higher quality	10
     .fb_count = 1 // if more than one i2s runs in continous mode.  Use only with jpeg
-#else
+#else //enable rtspserver
 	.jpeg_quality = 10,             //0-63 lower numbers are higher quality	10
     .fb_count = 2 // if more than one i2s runs in continous mode.  Use only with jpeg
 #endif
@@ -103,8 +114,8 @@ camera_config_t test {
     // .frame_size = FRAMESIZE_UXGA, // needs 234K of framebuffer space
     // .frame_size = FRAMESIZE_SXGA, // needs 160K for framebuffer
     // .frame_size = FRAMESIZE_VGA, // needs 96K or even smaller FRAMESIZE_SVGA - can work if using only 1 fb
-    //.frame_size = FRAMESIZE_QCIF,
-	.frame_size = FRAMESIZE_QQVGA,
+    // .frame_size = FRAMESIZE_QCIF,
+ .frame_size = FRAMESIZE_VGA,
     .jpeg_quality = 5,               //0-63 lower numbers are higher quality
     .fb_count = 1 // if more than one i2s runs in continous mode.  Use only with jpeg
 };
@@ -126,7 +137,7 @@ void setup()
 	delay(100);
 	
 	
-	cam.init(userCamNew);
+	cam.init(test);
 	delay(100);
 
 	sensor_t * s = esp_camera_sensor_get();
@@ -184,6 +195,9 @@ void setup()
 #ifdef ENABLE_UDPRAW
 	Serial.println("Broadcast via UDP, to port 8888");
 	initUDPraw();
+#endif
+#ifdef USE_PNG
+	initEncoder();
 #endif
 
 	//use RX PIN for OTA 
