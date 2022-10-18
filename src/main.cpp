@@ -137,7 +137,7 @@ void setup()
 	delay(100);
 	
 	
-	cam.init(test);
+	cam.init(userCamNew);
 	delay(100);
 
 	sensor_t * s = esp_camera_sensor_get();
