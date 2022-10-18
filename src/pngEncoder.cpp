@@ -36,25 +36,16 @@ void pngTask(void *pvParameters)
 
             if (rc == PNG_SUCCESS)
             {
+                uint8_t tempLine[WIDTH * 3];
                 for (int y = 0; y < HEIGHT && rc == PNG_SUCCESS; y++)
-                {
-                    uint8_t tempLine[WIDTH * 3];
-                          
-                    for (int x = 0; x < WIDTH; x++){
-                        uint16_t v = (buf[2*x]<<8)+buf[2*x+1];
-                        uint8_t b = v&0b11111;
-                        uint8_t g = (v>>5)&0b111111;
-                        uint8_t r = (v>>11)&0b11111;
-                        tempLine[x*3+2] = int(b*255/0b11111);
-                        tempLine[x*3+1] = int(g*255/0b111111);
-                        tempLine[x*3] = int(r*255/0b11111);
-                    }
-
-                    rc = png.addLine(tempLine);
+                {     
+                    rc = png.addRGB565Line(( uint16_t*)buf,tempLine);
                     //Serial.println(rc);
                     buf += WIDTH * 2;
                 } // for y
                 size_png = png.close();
+                while(transing_png)
+                    vTaskDelay(1);
                 buf_png = writeBuf;
 
 
@@ -72,5 +63,5 @@ void initEncoder()
 {
     outA = (uint8_t* )ps_malloc(PNG_BUF);
     outB = (uint8_t* )ps_malloc(PNG_BUF);
-    xTaskCreatePinnedToCore(pngTask, "PNG", 10000, NULL, tskIDLE_PRIORITY + 1, &pngTaskHandler,0);
+    xTaskCreatePinnedToCore(pngTask, "PNG", 4000, NULL, tskIDLE_PRIORITY + 1, &pngTaskHandler,0);
 }

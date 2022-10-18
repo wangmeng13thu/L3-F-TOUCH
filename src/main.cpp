@@ -137,7 +137,7 @@ void setup()
 	delay(100);
 	
 	
-	cam.init(userCamNew);
+	cam.init(test);
 	delay(100);
 
 	sensor_t * s = esp_camera_sensor_get();
@@ -198,6 +198,7 @@ void setup()
 #endif
 #ifdef USE_PNG
 	initEncoder();
+	s->set_reg(s,0XDA,0x01,0x01); //change high byte first/low byte first of RGB565 data
 #endif
 
 	//use RX PIN for OTA 

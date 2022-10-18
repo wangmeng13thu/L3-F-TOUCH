@@ -1,5 +1,7 @@
 #include "main.h"
 #ifdef ENABLE_WEBSERVER
+bool transing_png =0;
+
 /** Web server class */
 WebServer server(80);
 
@@ -17,6 +19,7 @@ void handle_jpg_stream(void);
 void handle_jpg(void);
 #ifdef USE_PNG
 void handle_png(void);
+
 #endif
 void handleNotFound();
 
@@ -152,7 +155,9 @@ void handle_png(void)
 	response += "Content-disposition: inline; filename=capture.png\r\n";
 	response += "Content-type: image/png\r\n\r\n";
 	server.sendContent(response);
-	Serial.println(thisClient.write(buf_png, size_png));
+	transing_png=1;
+	thisClient.write(buf_png, size_png);
+	transing_png=0;
 }
 #endif
 /**

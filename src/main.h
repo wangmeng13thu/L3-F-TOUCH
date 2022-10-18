@@ -22,7 +22,7 @@
 void initEncoder(void);
 extern int size_png;
 extern uint8_t* buf_png;   // Memory to hold the output file
-
+extern bool transing_png;
 
 // Select which of the servers are active
 // Select only one or the streaming will be very slow!
