@@ -183,7 +183,7 @@ void CStreamer::streamFrame(unsigned const char *data, uint32_t dataLen, uint32_
     int offset = 0;
     do {
         offset = SendRtpPacket(data, dataLen, offset, qtable0, qtable1);
-		delay(15);
+		
     } while(offset != 0);
 
     // Increment ONLY after a full frame
@@ -192,6 +192,7 @@ void CStreamer::streamFrame(unsigned const char *data, uint32_t dataLen, uint32_
 
     m_SendIdx++;
     if (m_SendIdx > 1) m_SendIdx = 0;
+
 };
 
 #include <assert.h>

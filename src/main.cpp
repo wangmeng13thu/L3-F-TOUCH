@@ -110,14 +110,14 @@ camera_config_t test {
     .xclk_freq_hz = 24000000,
     .ledc_timer = LEDC_TIMER_1,
     .ledc_channel = LEDC_CHANNEL_1,
-    .pixel_format = PIXFORMAT_RGB565,
+    .pixel_format = PIXFORMAT_JPEG,
     // .frame_size = FRAMESIZE_UXGA, // needs 234K of framebuffer space
     // .frame_size = FRAMESIZE_SXGA, // needs 160K for framebuffer
     // .frame_size = FRAMESIZE_VGA, // needs 96K or even smaller FRAMESIZE_SVGA - can work if using only 1 fb
     // .frame_size = FRAMESIZE_QCIF,
  .frame_size = FRAMESIZE_VGA,
-    .jpeg_quality = 5,               //0-63 lower numbers are higher quality
-    .fb_count = 1 // if more than one i2s runs in continous mode.  Use only with jpeg
+    .jpeg_quality = 10,               //0-63 lower numbers are higher quality
+    .fb_count = 2 // if more than one i2s runs in continous mode.  Use only with jpeg
 };
 
 
@@ -137,7 +137,7 @@ void setup()
 	delay(100);
 	
 	
-	cam.init(test);
+	cam.init(userCamNew);
 	delay(100);
 
 	sensor_t * s = esp_camera_sensor_get();
@@ -148,9 +148,9 @@ void setup()
 	// s->set_aec_value(s,shutterTime[ROLE]);//shutter time
 
     //try adjust WB (seems RGB)
-    s->set_reg(s,0XCC,0xFF,0x52);//R default:0x50 3.50:0x48 3.53:0x48 3.61:0x52 3.60:0x55 3.59:0x48 3.56:0x54 3.68:0x50 3.55:0x53 3.58:0x54 3.63:0x50 3.52:0x54 3.54:0x52 3.62  3.66:0x50 3.51:0x48 3.53:0x52 3.57:0x52 3.61 0x48 3.65:0x48
-    s->set_reg(s,0XCD,0xFF,0x45);//G default:0x41 3.50:0x45 3.53:0x41 3.61:0x45 3.60:0x45 3.59:0x45 3.56:0x45 3.68:0x41 3.55:0x42 3.58:0x44 3.63:0x48 3.52:0x45 3.54:0x41 3.62  3.66:0x45 3.51:0x41 3.53:0x41 3.57:0x45 3.61 0x45 3.65:0x41
-    s->set_reg(s,0XCE,0xFF,0x50);//B default:0x54 3.50:0x52 3.53:0x50 3.61:0x50 3.60:0x54 3.59:0x52 3.56:0x54 3.68:0x42 3.55:0x54 3.58:0x54 3.63:0x52 3.52:0x54 3.54:0x52 3.62  3.66:0x52 3.51:0x50 3.53:0x52 3.57:0x48 3.61 0x52 3.65:0x50
+    // s->set_reg(s,0XCC,0xFF,0x52);//R default:0x50 3.50:0x48 3.53:0x48 3.61:0x52 3.60:0x55 3.59:0x48 3.56:0x54 3.68:0x50 3.55:0x53 3.58:0x54 3.63:0x50 3.52:0x54 3.54:0x52 3.62  3.66:0x50 3.51:0x48 3.53:0x52 3.57:0x52 3.61 0x48 3.65:0x48
+    // s->set_reg(s,0XCD,0xFF,0x45);//G default:0x41 3.50:0x45 3.53:0x41 3.61:0x45 3.60:0x45 3.59:0x45 3.56:0x45 3.68:0x41 3.55:0x42 3.58:0x44 3.63:0x48 3.52:0x45 3.54:0x41 3.62  3.66:0x45 3.51:0x41 3.53:0x41 3.57:0x45 3.61 0x45 3.65:0x41
+    // s->set_reg(s,0XCE,0xFF,0x50);//B default:0x54 3.50:0x52 3.53:0x50 3.61:0x50 3.60:0x54 3.59:0x52 3.56:0x54 3.68:0x42 3.55:0x54 3.58:0x54 3.63:0x52 3.52:0x54 3.54:0x52 3.62  3.66:0x52 3.51:0x50 3.53:0x52 3.57:0x48 3.61 0x52 3.65:0x50
 
 	//top finger default RGB : 0x52 0x45 0x50
 	//middle finger default RGB : 0x50 0x42 0x52
@@ -162,7 +162,7 @@ void setup()
 	WiFi.mode(WIFI_STA);
 	WiFi.begin(ssid, password);
 	//WiFi.setTxPower(WIFI_POWER_8_5dBm);
-	
+	Serial.println("TX Power: "+String(WiFi.getTxPower()));
 
 	while (WiFi.status() != WL_CONNECTED)
 	{

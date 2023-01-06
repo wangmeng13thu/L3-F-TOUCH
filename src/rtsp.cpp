@@ -1,6 +1,6 @@
 #include "main.h"
 #ifdef ENABLE_RTSPSERVER
-#define RTSP_FRAME_RATE 5
+#define RTSP_FRAME_RATE 30
 
 // Use this URL to connect the RTSP stream, replace the IP address with the address of your device
 // rtsp://192.168.0.109:8554/mjpeg/1
@@ -29,7 +29,7 @@ boolean stopRTSPtask = false;
 void initRTSP(void)
 {
 	// Create the task for the RTSP server
-	xTaskCreate(rtspTask, "RTSP", 4096, NULL, 1, &rtspTaskHandler);
+	xTaskCreatePinnedToCore(rtspTask, "RTSP", 4096, NULL, tskIDLE_PRIORITY+1, &rtspTaskHandler,1);
 
 	// Check the results
 	if (rtspTaskHandler == NULL)
@@ -64,8 +64,11 @@ void rtspTask(void *pvParameters)
 	static uint32_t lastimage = millis();
 
 	// rtspServer.setNoDelay(true);
-	rtspServer.setTimeout(1); // 1
+	rtspServer.setTimeout(5); // 1
 	rtspServer.begin();
+
+	uint32_t fs=0;
+	uint32_t startSec=0;
 
 	while (1)
 	{
@@ -76,11 +79,16 @@ void rtspTask(void *pvParameters)
 			// instead we send only if we have new enough frames
 
 			uint32_t now = millis();
+
 			if (now > lastimage + msecPerFrame || now < lastimage)
 			{ // handle clock rollover
+				fs++;				
 				session->broadcastCurrentFrame(now);
 				lastimage = now;
+				//Serial.println(String(fs*1000/(now-startSec))+"Hz");
+				
 			}
+			Serial.println(millis()-now);
 
 			// Handle disconnection from RTSP client
 			if (session->m_stopped)
@@ -103,6 +111,9 @@ void rtspTask(void *pvParameters)
 
 				session = new CRtspSession(&rtspClient, streamer); // our threads RTSP session and state
 				delay(100);
+
+				startSec=millis();
+				fs=0;
 			}
 		}
 		if (stopRTSPtask)
@@ -119,7 +130,7 @@ void rtspTask(void *pvParameters)
 			// Delete this task
 			vTaskDelete(NULL);
 		}
-		delay(10);
+		vTaskDelay(1);
 	}
 }
 #endif

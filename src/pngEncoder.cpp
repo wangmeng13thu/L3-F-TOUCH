@@ -2,7 +2,7 @@
 #include <PNGenc.h>
 
 #define PNG_BUF 600000
-#define COMPRESS_LEVEL 1 // ZLIB compression levels: 1 = fastest, 9 = most compressed (slowest)
+#define COMPRESS_LEVEL 5 // ZLIB compression levels: 1 = fastest, 9 = most compressed (slowest)
 
 
 PNG png; // static instance of the PNG encoder lass
@@ -19,6 +19,9 @@ void pngTask(void *pvParameters)
 {
     while (1)
     {
+        // while(transing_png)
+        //     vTaskDelay(1);
+
         camera_fb_t *fb = esp_camera_fb_get();
         uint8_t *buf = fb->buf;
         int WIDTH = fb->width;
@@ -63,5 +66,5 @@ void initEncoder()
 {
     outA = (uint8_t* )ps_malloc(PNG_BUF);
     outB = (uint8_t* )ps_malloc(PNG_BUF);
-    xTaskCreatePinnedToCore(pngTask, "PNG", 4000, NULL, tskIDLE_PRIORITY + 1, &pngTaskHandler,0);
+    xTaskCreatePinnedToCore(pngTask, "PNG", 4000, NULL, tskIDLE_PRIORITY+1, &pngTaskHandler,1);
 }

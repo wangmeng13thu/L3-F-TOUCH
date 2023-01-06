@@ -67,10 +67,21 @@ inline ssize_t socketsend(SOCKET sockfd, const void *buf, size_t len)
 inline ssize_t udpsocketsend(UDPSOCKET sockfd, const void *buf, size_t len,
                              IPADDRESS destaddr, IPPORT destport)
 {
+    int err;
     sockfd->beginPacket(destaddr, destport);
     sockfd->write((const uint8_t *)  buf, len);
-    if(!sockfd->endPacket())
+    err = !sockfd->endPacket();
+    if(err){
         printf("error sending udp packet\n");
+    }
+
+    // a quick fix: slow down to avoid sending error nomem
+    int d = (130000-(int)ESP.getFreeHeap())/1000;
+    if(d>0)
+        vTaskDelay(d);
+    else
+        yield();
+
 
     return len;
 }

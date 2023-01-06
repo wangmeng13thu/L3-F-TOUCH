@@ -30,7 +30,7 @@ void initWebStream(void)
 {
 
 	// Create the task for the web server
-	xTaskCreatePinnedToCore(webTask, "WEB", 8000, NULL, configMAX_PRIORITIES-1, &webTaskHandler,1);
+	xTaskCreatePinnedToCore(webTask, "WEB", 8000, NULL, tskIDLE_PRIORITY+1, &webTaskHandler,1);
 
 	if (webTaskHandler == NULL)
 	{

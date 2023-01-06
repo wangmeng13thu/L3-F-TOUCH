@@ -1,5 +1,18 @@
 {
 	"files.associations": {
-		"functional": "cpp"
+		"*.c": "c",
+		"functional": "cpp",
+		"random": "cpp",
+		"cerrno": "cpp",
+		"array": "cpp",
+		"*.tcc": "cpp",
+		"deque": "cpp",
+		"string": "cpp",
+		"unordered_map": "cpp",
+		"unordered_set": "cpp",
+		"vector": "cpp",
+		"string_view": "cpp",
+		"memory": "cpp",
+		"initializer_list": "cpp"
 	}
 }
