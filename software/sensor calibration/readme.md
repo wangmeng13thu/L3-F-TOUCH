@@ -1,1 +1,1 @@
-Sesnor calibration readme
+Sensor calibration readme
