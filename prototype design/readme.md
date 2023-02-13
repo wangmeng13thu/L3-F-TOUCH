@@ -1,1 +1,1 @@
-The sensor's stl files are here. 
+The sensor's stl files
