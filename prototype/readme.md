@@ -4,5 +4,5 @@ files with .stl are 3D printed sensor sturctures. The Top is connected to the Bo
 
 The BOM is as follows:
 <p align="left">
-  <img width="540" height="300" src="BOM .png">
+  <img width="560" height="300" src="BOM .png">
 </p>
