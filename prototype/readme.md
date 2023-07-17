@@ -4,6 +4,8 @@ files with .stl are 3D printed sensor sturctures. The Top is connected to the Bo
 
 The SMD LEDs used are LUXEON 2835 Color Line. The PCB of the LEDs are in PCB folder.
 
+The Marker used is ArUco Marker 4x4(50) which can be generated from [here](https://chev.me/arucogen/)
+
 The BOM is as follows:
 <p align="left">
   <img width="560" height="300" src="BOM .png">
