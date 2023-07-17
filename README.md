@@ -25,5 +25,5 @@ Running
 Usage
 -----
 
-* Run [xx.py]() to get data from streaming (default).
+* Run [udprawRec.py](/software/picture mode/udprawRec.py) to get data from streaming (default).
 * Modify the firmware to use picture mode for higher quality images (advanced).
