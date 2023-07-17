@@ -22,8 +22,6 @@ Running
 * Use [VLC](https://github.com/videolan/vlc) to check the RTSP video streaming. Adress can be found in Serial monitor when startup.
 * Run [L3-FTOUCH.py](/software/L3-FTOUCH.py) for demonstration;
 
-Usage
------
-
-* Run [udprawRec.py](/software/picture mode/udprawRec.py) to get data from streaming (default).
+Remarks
+-----------
 * Modify the firmware to use picture mode for higher quality images (advanced).
