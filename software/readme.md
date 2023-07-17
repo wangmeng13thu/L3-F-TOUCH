@@ -1,5 +1,5 @@
 <p align="left">
-  <img width="272" height="200" src="calibration_setup_img.png">
+  <img width="408" height="300" src="calibration_setup_img.png">
 </p>
 
 * For the Tactile Mode, you can use any vision-based tactile sensor (VBTS) technique, for instance, GelSight, GelSlim etc.
