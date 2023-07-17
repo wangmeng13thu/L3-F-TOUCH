@@ -15,12 +15,12 @@ Manufacturing
 * The 3D design files and BOM are in [prototype](prototype/);
 * The wireless camera module design is in [PCB](PCB/);
 
-Calibration
+Running
 -----------
 
 * Compile and upload the [firmware](/firmware) via [PlatformIO](https://github.com/platformio/platformio-vscode-ide) (WiFi must be configured);
 * Use [VLC](https://github.com/videolan/vlc) to check the RTSP video streaming. Adress can be found in Serial monitor when startup.
-* Run [xx.py]() for calibration;
+* Run [L3-FTOUCH.py](/software/L3-FTOUCH.py) for demonstration;
 
 Usage
 -----
