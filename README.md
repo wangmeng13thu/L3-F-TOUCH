@@ -33,11 +33,11 @@ Citation
 If you use this project in your research, please cite:
 
 > @article{li20233,  
->     title={L $\^{}$\{$3$\}$ $ F-TOUCH: A Wireless GelSight with Decoupled Tactile and Three-axis Force Sensing},  
->     author={Li, Wanlin and Wang, Meng and Li, Jiarui and Su, Yao and Jha, Devesh K and Qian, Xinyuan and Althoefer, Kaspar and Liu, Hangxin},  
->     journal={IEEE Robotics and Automation Letters},  
->     year={2023},  
->     publisher={IEEE}  
+>    title={L $\^{}$\{$3$\}$ $ F-TOUCH: A Wireless GelSight with Decoupled Tactile and Three-axis Force Sensing},  
+>    author={Li, Wanlin and Wang, Meng and Li, Jiarui and Su, Yao and Jha, Devesh K and Qian, Xinyuan and Althoefer, Kaspar and Liu, Hangxin},  
+>    journal={IEEE Robotics and Automation Letters},  
+>    year={2023},  
+>    publisher={IEEE}  
 > }
 
 
