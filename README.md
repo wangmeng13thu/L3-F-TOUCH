@@ -31,6 +31,13 @@ Remarks
 Citation
 -----------
 If you use this project in your research, please cite:
+
+> [L $\^{}$\{$3$\}$ $ F-TOUCH: A Wireless GelSight with Decoupled Tactile and Three-axis Force Sensing](https://ieeexplore.ieee.org/document/10173594)  
+> Author(s): Li, Wanlin and Wang, Meng and Li, Jiarui and Su, Yao and Jha, Devesh K and Qian, Xinyuan and Althoefer, Kaspar and Liu, Hangxin
+> Publication Year: 2023  
+> Journal/Conference: IEEE Robotics and Automation Letters
+> publisher: IEEE
+
 @article{li20233,
   title={L $\^{}$\{$3$\}$ $ F-TOUCH: A Wireless GelSight with Decoupled Tactile and Three-axis Force Sensing},
   author={Li, Wanlin and Wang, Meng and Li, Jiarui and Su, Yao and Jha, Devesh K and Qian, Xinyuan and Althoefer, Kaspar and Liu, Hangxin},
