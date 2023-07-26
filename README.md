@@ -5,8 +5,6 @@ L3 F-TOUCH Design
   <img width="272" height="200" src="prototype/sensor_whole.png">
 </p>
 
-[![L3 F-TOUCH Video](https://res.cloudinary.com/marcomontalbano/image/upload/v1690362179/video_to_markdown/images/youtube--NIsbJhs_ChQ-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=NIsbJhs_ChQ "L3 F-TOUCH Video")
-
 L3 F-TOUCH sensor is an enhanced version of the GelSight sensor, it acquires a much better three-axis force sensing capability while being ***L***ight-weight, ***L***ow-cost and wire***L***ess for the ease of replication and deployment.
 
 This repository contains the documentation and manufacturing files for L3 F-TOUCH tactile sensor.
@@ -27,6 +25,10 @@ Running
 Remarks
 -----------
 * Modify the firmware to use picture mode for higher quality images (advanced).
+
+Video
+-----------
+[![L3 F-TOUCH Video](https://res.cloudinary.com/marcomontalbano/image/upload/v1690362179/video_to_markdown/images/youtube--NIsbJhs_ChQ-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=NIsbJhs_ChQ "L3 F-TOUCH Video")
 
 Citation
 -----------
