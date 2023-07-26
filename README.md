@@ -40,7 +40,7 @@ If you use this project in your research, please cite:
   title    = {L $\^{}$\{$3$\}$ $ F-TOUCH: A Wireless GelSight with Decoupled Tactile and Three-axis Force Sensing},
   journal  = {IEEE Robotics and Automation Letters},
   year     = {2023},
-  publisher= {IEEE},
+  publisher= {IEEE}
 }
 ```
 
