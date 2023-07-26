@@ -28,7 +28,8 @@ Remarks
 
 Video
 -----------
-[![L3 F-TOUCH Video](https://res.cloudinary.com/marcomontalbano/image/upload/v1690362179/video_to_markdown/images/youtube--NIsbJhs_ChQ-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=NIsbJhs_ChQ "L3 F-TOUCH Video")
+
+[![L3 F-TOUCH: A Wireless GelSight with Decoupled Tactile and Three-axis Force Sensing](https://res.cloudinary.com/marcomontalbano/image/upload/v1690367718/video_to_markdown/images/youtube--NIsbJhs_ChQ-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=NIsbJhs_ChQ "L3 F-TOUCH: A Wireless GelSight with Decoupled Tactile and Three-axis Force Sensing")
 
 Citation
 -----------
